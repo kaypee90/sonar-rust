@@ -37,7 +37,7 @@ public class RustGrammarTest {
         RustGrammar[] rustGrammars = RustGrammar.values();
 
         Set<RustGrammar> couldMatch = new HashSet<RustGrammar>(Arrays.asList(
-                RustGrammar.CALL_PARAMS_TERM,
+               // RustGrammar.CALL_PARAMS_TERM,
                 RustGrammar.COMPILATION_UNIT,
                 RustGrammar.EOF,
                 RustGrammar.FUNCTION_QUALIFIERS,

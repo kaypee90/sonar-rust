@@ -29,6 +29,9 @@ public class ExpressionWithoutBlockTest {
     @Test
     public void testExpressionWithoutBlock() {
         assertThat(RustGrammar.create().build().rule(RustGrammar.EXPRESSION_WITHOUT_BLOCK))
+                //TODO Litteral Expression
+                //TODO Path expression
+                //Operator expressdions
                 .matches("1<<0")
                 .matches("1+1")
                 .matches("1+1+1+1")
@@ -39,6 +42,26 @@ public class ExpressionWithoutBlockTest {
                 .matches("1-3")
                 .matches("1-3-2")
                 .matches("22%7")
+                //TODO grouped expression
+                //TODO   ArrayExpression
+                //TODO   AwaitExpression
+                //TODO   IndexExpression
+                //TODO   TupleExpression
+                //TODO   TupleIndexingExpression
+                //TODO   StructExpression
+                //TODO   EnumerationVariantExpression
+                //  CallExpression
+                .matches("foo()")
+                .matches("abc()")
+                .matches("add(1i32,2i32)")
+                //TODO   MethodCallExpression
+                //TODO   FieldExpression
+                //TODO ClosureExpression
+                //TODO ContinueExpression
+                //TODO BreakExpression
+                //TODO RangeExpression
+                //TODO ReturnExpression
+        //TODO MacroInvocation
         ;
     }
 }

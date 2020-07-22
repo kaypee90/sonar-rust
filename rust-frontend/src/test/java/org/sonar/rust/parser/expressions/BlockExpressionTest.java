@@ -44,7 +44,14 @@ Statements :
     @Test
     public void testBlockExpression() {
         assertThat(RustGrammar.create().build().rule(RustGrammar.BLOCK_EXPRESSION))
+                .matches("{}")
                 .matches("{let y=42;}")
+                .matches("{println!(\"hi there\");}")
+                .matches("{abc()}")
+                .matches("{\n" +
+                        "    println!(\"Hello, world!\");\n" +
+                        "    abc()\n" +
+                        "}")
         ;
     }
 }

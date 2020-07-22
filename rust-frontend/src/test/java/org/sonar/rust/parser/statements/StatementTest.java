@@ -38,6 +38,16 @@ public class StatementTest {
         ;
     }
 
+    @Test
+    public void testExpressionStatement() {
+        assertThat(RustGrammar.create().build().rule(RustGrammar.EXPRESSION_STATEMENT))
+                //    ExpressionWithoutBlock ;
+                .matches("abc();")
+                //  ExpressionWithBlock ;?
+
+        ;
+    }
+
 
     @Test
     public void testStatement() {
@@ -45,6 +55,18 @@ public class StatementTest {
                 .matches(";")
                 .matches("extern crate pcre;")
                 .matches("let y=42;")
+        ;
+    }
+
+    @Test
+    public void testStatements() {
+        assertThat(RustGrammar.create().build().rule(RustGrammar.STATEMENTS))
+                .matches(";")
+                .matches("extern crate pcre;")
+                .matches("let y=42;")
+                .matches("let y=42;\nlet z=43;")
+                .matches("let y=42;\nextern crate pcre;\n;")
+                .matches("abc()")
         ;
     }
 }

@@ -40,6 +40,7 @@ public class IdentifierTest {
                 .notMatches("42")
                 .notMatches("(")
                 .notMatches("a b")
+                .notMatches("abc()")
                 .notMatches("a self")
                 .notMatches("\"hello\")")
                 .matches("crate_type")
@@ -84,9 +85,10 @@ public class IdentifierTest {
                 .matches("a")
                 .matches("bc")
                 .matches("Abc")
-                .notMatches("as")
-                .notMatches("trait")
+                .notMatches("as") // keyword
+                .notMatches("trait") //keyword
                 .notMatches("foo ")
+                .notMatches("foo()")
                 .notMatches("r#")
                 .matches("r#a")
                 .matches("r#_52")

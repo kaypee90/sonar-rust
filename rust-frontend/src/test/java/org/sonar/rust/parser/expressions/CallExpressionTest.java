@@ -28,9 +28,28 @@ import static org.sonar.sslr.tests.Assertions.assertThat;
 public class CallExpressionTest {
 
     @Test
+    public void testCallExpressionTerm() {
+        assertThat(RustGrammar.create().build().rule(RustGrammar.CALL_PARAMS))
+                //.matches("")
+                .matches("1i32")
+                .matches("{let y=42;}")
+                .matches("{;}")
+                .matches("0")
+                .matches("3+2")
+                .matches("1 << 1")
+                .matches("foo")
+
+
+
+        ;
+    }
+
+    @Test
     public void testCallExpression() {
         assertThat(RustGrammar.create().build().rule(RustGrammar.CALL_EXPRESSION))
-                //FIXME.matches("foo()")
+                .matches("foo()")
+                .matches("abc()")
+                .matches("add(1i32,2i32)")
 
 
         ;

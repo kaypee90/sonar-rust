@@ -44,6 +44,27 @@ public class CompilationUnitTest {
                         " // line comment \n" +
                         "    println!(\"Hello, world!\");\n" +
                         "}")
+                /* FIXME
+                .matches("fn main() {\n" +
+                        "    println!(\"Checking issues\");\n" +
+                        "    absurd_extreme_comparison();\n" +
+                        "    println!(\"Done\");\n" +
+                        "    as_conversions();\n" +
+                        "}\n" +
+                        "\n" +
+                        "fn absurd_extreme_comparison(){\n" +
+                        "    let vec: Vec<isize> = Vec::new();\n" +
+                        "    if vec.len() <= 0 {}\n" +
+                        "    if 100 > std::i32::MAX {}\n" +
+                        "}\n" +
+                        "\n" +
+                        "fn as_conversions(){\n" +
+                        "    let i = 0u32 as u64;\n" +
+                        "\n" +
+                        "    let _j = &i as *const u64 as *mut u64;\n" +
+                        "}")
+
+                 */
 
 
         ;

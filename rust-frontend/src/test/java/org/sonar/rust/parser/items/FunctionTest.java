@@ -108,6 +108,17 @@ public class FunctionTest {
                 .matches("fn main() {\n" +
                         "    println!(\"Hello, world!\");\n" +
                         "}")
+                .matches("fn main() {\n" +
+                        "    abc()\n" +
+                        "}")
+                .matches("fn main() {\n" +
+                        "    println!(\"Hello, world!\");\n" +
+                        "    println!(\"A second line \");\n" +
+                        "}")
+                .matches("fn main() {\n" +
+                        "    println!(\"Hello, world!\");\n" +
+                        "    abc()\n" +
+                        "}")
 
 
         ;

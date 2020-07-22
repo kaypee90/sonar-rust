@@ -79,6 +79,7 @@ public class RustSensorTest {
     private File dir = new File("src/test/resources/");
     private static String FILE1 = "sensor/main.rs";
     private static String FILE2 = "sensor/main2.rs";
+    private static String FILE3 = "sensor/extreme.rs";
 
     @org.junit.Rule
     public LogTester logTester = new LogTester();
@@ -169,5 +170,37 @@ public class RustSensorTest {
         tester.fileSystem().add(inputFile);
         return inputFile;
     }
+
+    /* FIXME
+    @Test
+    public void analyseWithFunctions() throws IOException {
+        DefaultInputFile inputFile = executeSensorOnSingleFile(FILE3);
+        assertEquals((Integer) 3, tester.measure(inputFile.key(), CoreMetrics.NCLOC).value());
+        assertEquals((Integer) 2, tester.measure(inputFile.key(), CoreMetrics.STATEMENTS).value());
+        assertEquals((Integer) 0, tester.measure(inputFile.key(), CoreMetrics.COMPLEXITY).value());
+        assertEquals((Integer) 1, tester.measure(inputFile.key(), CoreMetrics.COMMENT_LINES).value());
+        assertEquals((Integer) 1, tester.measure(inputFile.key(), CoreMetrics.FUNCTIONS).value());
+        assertEquals(3, tester.cpdTokens(inputFile.key()).size());
+        assertEquals(Collections.singletonList(TypeOfText.COMMENT), tester.highlightingTypeAt(inputFile.key(), 1, 1));
+        assertEquals(Collections.singletonList(TypeOfText.KEYWORD), tester.highlightingTypeAt(inputFile.key(), 3, 1));
+        assertEquals(Collections.singletonList(TypeOfText.STRING), tester.highlightingTypeAt(inputFile.key(), 5, 13));
+
+        assertEquals(0, tester.allIssues().size());
+
+        verify(fileLinesContext).setIntValue(CoreMetrics.NCLOC_DATA_KEY, 3, 1);
+        verify(fileLinesContext).setIntValue(CoreMetrics.NCLOC_DATA_KEY, 5, 1);
+        verify(fileLinesContext).setIntValue(CoreMetrics.NCLOC_DATA_KEY, 6, 1);
+
+
+        verify(fileLinesContext).save();
+
+
+
+        Assertions.assertThat(tester.allAnalysisErrors()).isEmpty();
+
+
+    }
+
+     */
 
 }

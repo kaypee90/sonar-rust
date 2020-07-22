@@ -70,7 +70,6 @@ public enum RustGrammar implements GrammarRuleKey {
     CALL_EXPRESSION,
     CALL_EXPRESSION_TERM,
     CALL_PARAMS,
-    CALL_PARAMS_TERM,
     CARETEQ_EXPRESSION,
     CHAR_LITERAL,
     CLOSURE_EXPRESSION,
@@ -107,7 +106,6 @@ public enum RustGrammar implements GrammarRuleKey {
     EXPRESSION_STATEMENT,
     EXPRESSION_WITHOUT_BLOCK,
     EXPRESSION_WITHOUT_BLOCK_ES,
-    EXPRESSION_WITHOUT_BLOCK_STS,
     EXPRESSION_WITH_BLOCK,
     EXTERNAL_FUNCTION_ITEM,
     EXTERNAL_ITEM,
@@ -1122,10 +1120,13 @@ public enum RustGrammar implements GrammarRuleKey {
                 b.optional(RustPunctuator.COLON, SPC, TYPE, SPC),
                 b.optional(RustPunctuator.EQ, SPC, EXPRESSION, SPC),
                 RustPunctuator.SEMI);
+
         b.rule(EXPRESSION_STATEMENT).is(b.firstOf(
-                b.firstOf(LITERALS, EXPRESSION_WITHOUT_BLOCK_ES),
+                b.sequence(EXPRESSION_WITHOUT_BLOCK, RustPunctuator.SEMI),
                 b.sequence(EXPRESSION_WITH_BLOCK, b.optional(RustPunctuator.SEMI))
-        ));
+
+                ));
+
         b.rule(EXPRESSION_WITHOUT_BLOCK_ES).is(RustPunctuator.SEMI, EXPRESSION_WITHOUT_BLOCK_ES);
 
         b.rule(ANY_TOKEN).is(
@@ -1172,6 +1173,7 @@ public enum RustGrammar implements GrammarRuleKey {
         b.rule(EXPRESSION).is(b.firstOf(EXPRESSION_WITHOUT_BLOCK, EXPRESSION_WITH_BLOCK));
         b.rule(EXPRESSION_WITHOUT_BLOCK).is(b.zeroOrMore(OUTER_ATTRIBUTE),
                 b.firstOf(
+                        CALL_EXPRESSION,
                         OPERATOR_EXPRESSION,
                         LITTERAL_EXPRESSION,
                         PATH_EXPRESSION,
@@ -1183,7 +1185,6 @@ public enum RustGrammar implements GrammarRuleKey {
                         TUPLE_INDEXING_EXPRESSION,
                         STRUCT_EXPRESSION,
                         ENUMERATION_VARIANT_EXPRESSION,
-                        CALL_EXPRESSION,
                         METHOD_CALL_EXPRESSION,
                         FIELD_EXPRESSION,
                         CLOSURE_EXPRESSION,
@@ -1342,15 +1343,19 @@ public enum RustGrammar implements GrammarRuleKey {
     }
 
     private static void call(LexerlessGrammarBuilder b) {
-        b.rule(CALL_EXPRESSION).is(LITERALS, CALL_EXPRESSION_TERM);
-        b.rule(CALL_EXPRESSION_TERM).is(b.firstOf(LITERALS,
-                b.sequence("(", b.optional(CALL_PARAMS), ")", CALL_EXPRESSION_TERM)
+
+        b.rule(CALL_EXPRESSION).is(IDENTIFIER, CALL_EXPRESSION_TERM);
+
+        b.rule(CALL_EXPRESSION_TERM).is(b.firstOf(
+                b.sequence("(", b.optional(CALL_PARAMS), ")", b.zeroOrMore(CALL_EXPRESSION_TERM)),IDENTIFIER
         ));
 
-        b.rule(CALL_PARAMS).is(b.sequence(ANY_TOKEN, CALL_PARAMS_TERM));
 
-        b.rule(CALL_PARAMS_TERM).is
-                (b.zeroOrMore("(", EXPRESSION, ")", CALL_PARAMS_TERM), b.optional(RustPunctuator.COMMA, CALL_PARAMS_TERM));
+        b.rule(CALL_PARAMS).is(seq(b, EXPRESSION, RustPunctuator.COMMA));
+
+
+
+
 
     }
 
@@ -1549,11 +1554,10 @@ public enum RustGrammar implements GrammarRuleKey {
                 SPC, b.optional(STATEMENTS), SPC, "}"
         );
         b.rule(STATEMENTS).is(b.firstOf(
-                b.oneOrMore(STATEMENT),
-                b.sequence(b.oneOrMore(STATEMENT), EXPRESSION_WITHOUT_BLOCK),
-                b.firstOf(LITERALS, EXPRESSION_WITHOUT_BLOCK_STS)
+                b.sequence(b.oneOrMore(STATEMENT,SPC), EXPRESSION_WITHOUT_BLOCK),
+                b.oneOrMore(STATEMENT,SPC),
+                EXPRESSION_WITHOUT_BLOCK
         ));
-        b.rule(EXPRESSION_WITHOUT_BLOCK_STS).is(LITERALS, EXPRESSION_WITHOUT_BLOCK_STS);
 
         b.rule(ASYNC_BLOCK_EXPRESSION).is("async", b.optional("move"), BLOCK_EXPRESSION);
         b.rule(UNSAFE_BLOCK_EXPRESSION).is(UNSAFE, BLOCK_EXPRESSION);
